@@ -54,6 +54,10 @@ def handle_mqtt_message(client, userdata, message):
         'Received message on topic: {topic} with payload: {payload}'.format(**data))
 
 
+@app.route('/')
+def hello_world():
+    return 'Hello,Fiteness Tracker Backend on'
+
 @app.route('/publish', methods=['POST'])
 def publish_message():
     request_data = request.get_json()
