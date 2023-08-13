@@ -15,7 +15,8 @@ app.config['MQTT_PASSWORD'] = ''
 app.config['MQTT_KEEPALIVE'] = 5  # Set KeepAlive time in seconds
 # If your broker supports TLS, set it True
 app.config['MQTT_TLS_ENABLED'] = False
-topic = '/flask/mqtt'
+
+topic_ontrip = '/crrtripdetails'
 
 
 # Generate a Client ID with the publish prefix.
@@ -38,7 +39,7 @@ users = [
 def handle_connect(client, userdata, flags, rc):
     if rc == 0:
         print('Connected successfully')
-        mqtt_client.subscribe(topic)  # subscribe topic
+        mqtt_client.subscribe(topic_ontrip)  # subscribe topic
         mqtt_client.publish('/hello', 'I am Cooray')
     else:
         print('Bad connection. Code:', rc)
@@ -82,7 +83,7 @@ def login_user():
     if user and user['password'] == password:
         return jsonify({'message': 'Login successful', 'status': 200}), 200
     else:
-        return jsonify({'message': 'Invalid email or password', 'status': 401}), 401
+        return jsonify({'message': 'Invalid email or password try again', 'status': 401}), 401
 
 
 if __name__ == '__main__':
