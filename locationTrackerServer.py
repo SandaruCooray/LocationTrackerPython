@@ -3,6 +3,8 @@ from flask_mqtt import Mqtt
 
 import random
 import time
+import json
+
 
 app = Flask(__name__)
 
@@ -51,8 +53,22 @@ def handle_mqtt_message(client, userdata, message):
         topic=message.topic,
         payload=message.payload.decode()
     )
-    print(
-        'Received message on topic: {topic} with payload: {payload}'.format(**data))
+
+    # print(
+    #     'Received message on topic: {topic} with payload: {payload}'.format(**data))
+
+    if message.topic == topic_ontrip:
+        # on trip details
+        data_dict = json.loads(message.payload.decode())
+
+        # Access individual values
+        cr_uemail = data_dict['uemail']
+        traveled_meters = data_dict['traveledmeters']
+        cr_relapsed_time_seconds = data_dict['crrelapsedtimeseconds']
+
+        print("Current user :", cr_uemail)
+        print("Traveled Meters:", traveled_meters)
+        print("CR Relapsed Time Seconds:", cr_relapsed_time_seconds)
 
 
 @app.route('/')
