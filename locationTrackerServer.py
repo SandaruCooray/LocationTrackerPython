@@ -36,6 +36,8 @@ users = [
     {'email': 'a@a5.com', 'password': 'password5'}
 ]
 
+# on connect to broker
+
 
 @mqtt_client.on_connect()
 def handle_connect(client, userdata, flags, rc):
@@ -45,6 +47,8 @@ def handle_connect(client, userdata, flags, rc):
         mqtt_client.publish('/hello', 'I am Cooray')
     else:
         print('Bad connection. Code:', rc)
+
+# handle mqtt incoming messages
 
 
 @mqtt_client.on_message()
@@ -70,10 +74,14 @@ def handle_mqtt_message(client, userdata, message):
         print("Traveled Meters:", traveled_meters)
         print("CR Relapsed Time Seconds:", cr_relapsed_time_seconds)
 
+# app route defulat
+
 
 @app.route('/')
 def hello_world():
-    return 'Hello,Fiteness Tracker Backend on'
+    return 'Hello, Fiteness Tracker Backend on'
+
+# test publish
 
 
 @app.route('/publish', methods=['POST'])
@@ -82,6 +90,8 @@ def publish_message():
     publish_result = mqtt_client.publish(
         request_data['topic'], request_data['msg'])
     return jsonify({'code': publish_result[0]})
+
+# user login app route
 
 
 @app.route('/login_user', methods=['POST'])
@@ -100,6 +110,29 @@ def login_user():
         return jsonify({'message': 'Login successful', 'status': 200}), 200
     else:
         return jsonify({'message': 'Invalid email or password try again', 'status': 401}), 401
+
+
+# user results
+@app.route('/get_results', methods=['POST'])
+def get_results():
+    data = request.get_json()
+
+    if not data or 'email' not in data:
+        return jsonify({'message': 'Email  are required.', 'status': 400}), 400
+
+    email = data['email']
+
+    # get asking user data
+
+    # 1 distance should be  in  meters
+    # 2 calories hould be number
+    # 3 time should send as seconds
+
+    sendRet = [1200, 500, 67000,   'Explore the scenic beauty of the countryside with a weekend getaway',
+               'Delve into the world of classic literature with a novel by Jane Austen',
+               'Embark on a culinary adventure and try your hand at cooking Thai cuisine',]
+
+    return jsonify({'message': sendRet, 'status': 200}), 200
 
 
 if __name__ == '__main__':
