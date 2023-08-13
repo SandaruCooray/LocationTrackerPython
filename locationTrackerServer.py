@@ -58,6 +58,7 @@ def handle_mqtt_message(client, userdata, message):
 def hello_world():
     return 'Hello,Fiteness Tracker Backend on'
 
+
 @app.route('/publish', methods=['POST'])
 def publish_message():
     request_data = request.get_json()
@@ -71,7 +72,7 @@ def login_user():
     data = request.get_json()
 
     if not data or 'email' not in data or 'password' not in data:
-        return jsonify({'message': 'Email and password are required.'}), 400
+        return jsonify({'message': 'Email and password are required.', 'status': 400}), 400
 
     email = data['email']
     password = data['password']
@@ -79,9 +80,9 @@ def login_user():
     user = next((user for user in users if user['email'] == email), None)
 
     if user and user['password'] == password:
-        return jsonify({'message': 'Login successful'}), 200
+        return jsonify({'message': 'Login successful', 'status': 200}), 200
     else:
-        return jsonify({'message': 'Invalid email or password'}), 401
+        return jsonify({'message': 'Invalid email or password', 'status': 401}), 401
 
 
 if __name__ == '__main__':
